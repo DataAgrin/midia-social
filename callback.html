@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Data Agrin - Autorização TikTok</title>
+<style>
+  body { font-family: -apple-system, sans-serif; background: #111; color: #eee; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .card { background: #1c1c1c; padding: 32px 40px; border-radius: 12px; max-width: 480px; text-align: center; }
+  h1 { font-size: 20px; }
+  code { display: block; background: #000; padding: 16px; border-radius: 8px; word-break: break-all; margin: 16px 0; font-size: 14px; color: #4ade80; }
+  button { background: #ff0050; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+  .err { color: #f87171; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="title">Processando...</h1>
+    <code id="code"></code>
+    <button id="copyBtn" style="display:none" onclick="copyCode()">Copiar código</button>
+    <p style="opacity:.6; font-size:13px">Copie o código acima e cole de volta no chat com a Claude.</p>
+  </div>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const error = params.get('error');
+  const titleEl = document.getElementById('title');
+  const codeEl = document.getElementById('code');
+  const btn = document.getElementById('copyBtn');
+
+  if (code) {
+    titleEl.textContent = 'Autorizado com sucesso!';
+    codeEl.textContent = code;
+    btn.style.display = 'inline-block';
+  } else if (error) {
+    titleEl.textContent = 'Erro na autorização';
+    titleEl.className = 'err';
+    codeEl.textContent = error + ': ' + (params.get('error_description') || '');
+  } else {
+    titleEl.textContent = 'Nenhum código recebido.';
+  }
+
+  function copyCode() {
+    navigator.clipboard.writeText(code);
+    btn.textContent = 'Copiado!';
+  }
+</script>
+</body>
+</html>
